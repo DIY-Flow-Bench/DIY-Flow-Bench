@@ -74,6 +74,10 @@ struct BenchSettings {
   int temp_unit = CELCIUS;                        // Defalt display unit of temperature
   bool ap_mode = false;                           // Default WiFi connection mode is accesspoint mode
   double valveLiftInterval = 1.5;                 // Distance between valve lift data points (can be metric or imperial)
+  int iTIME_MODE = 0;                             // 0: Off, 1: RTC, 2: NTP, 3: Remote Server
+  int iTZ_OFFSET = 0;                             // Timezone offset hours (e.g. +10, -5)
+  String sNTP_SERVER = "pool.ntp.org";            // Custom/NTP standard pool address
+  String sREM_TIME_SRV = "time.nist.gov";         // Custom/Remote time server address
 };
 
 
@@ -104,6 +108,9 @@ struct Configuration {
   int iADC_TYPE = ADS1115;
   int iADC_I2C_ADDR = 72; 
   int iADC_MAX_RETRY = 10;
+
+  bool bRTC_ENABLED = false;                      // Enable RTC hardware support
+  int iRTC_I2C_ADDR = 104;                        // DS1307 target address (0x68 = 104)
 
   int iMAF_SRC_TYP = ADS_ADC;
   int iMAF_SENS_TYP = 0;
@@ -233,6 +240,7 @@ struct DeviceStatus {
   int serialData = 0;
   String statusMessage = BOOT_MESSAGE;
   bool apMode = false;
+  bool bRTC_PRESENT = false;
   double HWMBME = 0.0;
   double HWMADC = 0.0;
   double HWMSSE = 0.0;
@@ -354,6 +362,18 @@ struct ValveLiftData {
   double_t LiftData10 = 0.0;
   double_t LiftData11 = 0.0;
   double_t LiftData12 = 0.0;
+  String LiftTime1 = "";
+  String LiftTime2 = "";
+  String LiftTime3 = "";
+  String LiftTime4 = "";
+  String LiftTime5 = "";
+  String LiftTime6 = "";
+  String LiftTime7 = "";
+  String LiftTime8 = "";
+  String LiftTime9 = "";
+  String LiftTime10 = "";
+  String LiftTime11 = "";
+  String LiftTime12 = "";
 };
 
 

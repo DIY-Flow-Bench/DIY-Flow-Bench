@@ -54,6 +54,12 @@ class Sensors {
 		void mafSetupISR(uint8_t irq_pin, void (*ISR_callback)(void), int value);
 		String getSensorType(int sensorType);
 
+		uint8_t decToBcd(uint8_t val);
+		uint8_t bcdToDec(uint8_t val);
+		bool readRTC(int &year, int &month, int &day, int &hour, int &minute, int &second);
+		bool writeRTC(int year, int month, int day, int hour, int minute, int second);
+		void syncSystemTime();
+
 	
 		double startupBaroPressure;
 		volatile uint64_t StartValue;                 

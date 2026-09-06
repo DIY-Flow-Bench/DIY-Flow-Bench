@@ -85,6 +85,31 @@
                 </div>
             </fieldset>
 
+            <!-- RTC Settings -->
+            <fieldset>
+                <legend>RTC Settings&nbsp;&nbsp;&nbsp;</legend>
+                <div class="input-group">
+                    <label for="bRTC_ENABLED">RTC Support</label>
+                    <select name='bRTC_ENABLED' class='config-select'>
+                        <option value='0' ~bRTC_ENABLED_0~>Disabled</option>
+                        <option value='1' ~bRTC_ENABLED_1~>Enabled</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="iRTC_I2C_ADDR">I2C Address</label>
+                    <input type="number" id="iRTC_I2C_ADDR" name="iRTC_I2C_ADDR" value="~iRTC_I2C_ADDR~">
+                </div>
+                <div class="input-group">
+                    <label>Status</label>
+                    <span class="config-value" style="font-weight: bold;">~sRTC_STATUS~</span>
+                </div>
+                <hr class="fieldset-divider">
+                <div class="input-group">
+                    <label>Set Time Manually</label>
+                    <button type="button" onclick="setManTime()" class="button-sml" style="padding: 4px 8px; margin-top: 4px;">Set to Computer Clock</button>
+                </div>
+            </fieldset>
+
             <!-- MAF Settings -->
             <fieldset>
                 <legend>MAF Settings&nbsp;&nbsp;&nbsp;<a class="wiki-link" href="https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki/Configuration#maf-settings" target="_blank">&#9432;</a></legend>
@@ -295,3 +320,27 @@
     </form>
 
     <script type="text/javascript" src="config.js"></script>
+    <script type="text/javascript">
+        function setManTime() {
+            var now = new Date();
+            var formData = new FormData();
+            formData.append("year", now.getFullYear());
+            formData.append("month", now.getMonth() + 1);
+            formData.append("day", now.getDate());
+            formData.append("hour", now.getHours());
+            formData.append("minute", now.getMinutes());
+            formData.append("second", now.getSeconds());
+            
+            fetch("/api/set_time", {
+                method: "POST",
+                body: formData
+            }).then(function(res) {
+                if (res.ok) {
+                    alert("Local computer clock synchronized successfully on DIY-FB RTC!");
+                    window.location.reload();
+                } else {
+                    alert("Error updating time.");
+                }
+            });
+        }
+    </script>

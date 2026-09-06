@@ -351,7 +351,7 @@ void DataHandler::initialiseConfig () {
   _prefs.begin("config");
 
   // Check if last key exists in NVM
-  if (_prefs.isKey("bSWIRL_ENBLD")) {
+  if (_prefs.isKey("iRTC_I2C_ADDR")) {
     // key already exists
     _prefs.end();
     return;
@@ -378,6 +378,9 @@ void DataHandler::initialiseConfig () {
 
   if (!_prefs.isKey("iADC_TYPE")) _prefs.putInt("iADC_TYPE", ADS1115);
   if (!_prefs.isKey("iADC_I2C_ADDR")) _prefs.putInt("iADC_I2C_ADDR", 72);
+
+  if (!_prefs.isKey("bRTC_ENBLD")) _prefs.putBool("bRTC_ENBLD", false);
+  if (!_prefs.isKey("iRTC_I2C_ADDR")) _prefs.putInt("iRTC_I2C_ADDR", 104);
 
   if (!_prefs.isKey("iMAF_SENS_TYP")) _prefs.putInt("iMAF_SENS_TYP", SENSOR_DISABLED);
   if (!_prefs.isKey("iMAF_SRC_TYP")) _prefs.putInt("iMAF_SRC_TYP", ADS_ADC);
@@ -455,6 +458,9 @@ void DataHandler::loadConfig () {
   config.iADC_TYPE = _prefs.getInt("iADC_TYPE", ADS1115);
   config.iADC_I2C_ADDR = _prefs.getInt("iADC_I2C_ADDR", 72);
 
+  config.bRTC_ENABLED = _prefs.getBool("bRTC_ENBLD", false);
+  config.iRTC_I2C_ADDR = _prefs.getInt("iRTC_I2C_ADDR", 104);
+
   config.iMAF_SENS_TYP = _prefs.getInt("iMAF_SENS_TYP", SENSOR_DISABLED);
   config.iMAF_SRC_TYP = _prefs.getInt("iMAF_SRC_TYP", ADS_ADC);
   config.dMAF_MV_TRIM = _prefs.getDouble("dMAF_MV_TRIM", 0.0);
@@ -521,7 +527,7 @@ void DataHandler::initialiseSettings () {
   _prefs.begin("settings");
 
     // Check if last key exists in NVM
-  if (_prefs.isKey("dORIFICE6_PRESS")) {
+  if (_prefs.isKey("sREM_TIME_SRV")) {
     // key already exists
     _prefs.end();
     return;
@@ -560,6 +566,11 @@ void DataHandler::initialiseSettings () {
 
   if (!_prefs.isKey("dLIFT_INTERVAL")) _prefs.putDouble("dLIFT_INTERVAL", 1.5F);
   if (!_prefs.isKey("iBENCH_TYPE")) _prefs.putInt("iBENCH_TYPE", MAF_BENCH);
+
+  if (!_prefs.isKey("iTIME_MODE")) _prefs.putInt("iTIME_MODE", 0);
+  if (!_prefs.isKey("iTZ_OFFSET")) _prefs.putInt("iTZ_OFFSET", 0);
+  if (!_prefs.isKey("sNTP_SERVER")) _prefs.putString("sNTP_SERVER", "pool.ntp.org");
+  if (!_prefs.isKey("sREM_TIME_SRV")) _prefs.putString("sREM_TIME_SRV", "time.nist.gov");
 
   // Add additional / new keys to bottom of list and update the key check
 
@@ -621,6 +632,10 @@ void DataHandler::loadSettings () {
   settings.valveLiftInterval = _prefs.getDouble("dLIFT_INTERVAL", 1.5F  );
   settings.bench_type = _prefs.getInt("iBENCH_TYPE", MAF_BENCH );
 
+  settings.iTIME_MODE = _prefs.getInt("iTIME_MODE", 0);
+  settings.iTZ_OFFSET = _prefs.getInt("iTZ_OFFSET", 0);
+  settings.sNTP_SERVER = _prefs.getString("sNTP_SERVER", "pool.ntp.org");
+  settings.sREM_TIME_SRV = _prefs.getString("sREM_TIME_SRV", "time.nist.gov");
 
   status.nvmSettings = _prefs.freeEntries();
   _message.debugPrintf("Settings NVM Free Entries: %u \n", status.nvmSettings); 
@@ -661,6 +676,19 @@ void DataHandler::initialiseLiftData () {
   if (!_prefs.isKey("LIFTDATA11")) _prefs.putDouble("LIFTDATA11", 0.0);
   if (!_prefs.isKey("LIFTDATA12")) _prefs.putDouble("LIFTDATA12", 0.0);
 
+  if (!_prefs.isKey("sLIFTTIME1")) _prefs.putString("sLIFTTIME1", "");
+  if (!_prefs.isKey("sLIFTTIME2")) _prefs.putString("sLIFTTIME2", "");
+  if (!_prefs.isKey("sLIFTTIME3")) _prefs.putString("sLIFTTIME3", "");
+  if (!_prefs.isKey("sLIFTTIME4")) _prefs.putString("sLIFTTIME4", "");
+  if (!_prefs.isKey("sLIFTTIME5")) _prefs.putString("sLIFTTIME5", "");
+  if (!_prefs.isKey("sLIFTTIME6")) _prefs.putString("sLIFTTIME6", "");
+  if (!_prefs.isKey("sLIFTTIME7")) _prefs.putString("sLIFTTIME7", "");
+  if (!_prefs.isKey("sLIFTTIME8")) _prefs.putString("sLIFTTIME8", "");
+  if (!_prefs.isKey("sLIFTTIME9")) _prefs.putString("sLIFTTIME9", "");
+  if (!_prefs.isKey("sLIFTTIME10")) _prefs.putString("sLIFTTIME10", "");
+  if (!_prefs.isKey("sLIFTTIME11")) _prefs.putString("sLIFTTIME11", "");
+  if (!_prefs.isKey("sLIFTTIME12")) _prefs.putString("sLIFTTIME12", "");
+
   _prefs.end();
 
 }
@@ -698,6 +726,19 @@ void DataHandler::loadLiftData () {
   valveData.LiftData10 = _prefs.getDouble("LIFTDATA10", 0.0);
   valveData.LiftData11 = _prefs.getDouble("LIFTDATA11", 0.0);
   valveData.LiftData12 = _prefs.getDouble("LIFTDATA12", 0.0);
+
+  valveData.LiftTime1 = _prefs.getString("sLIFTTIME1", "");
+  valveData.LiftTime2 = _prefs.getString("sLIFTTIME2", "");
+  valveData.LiftTime3 = _prefs.getString("sLIFTTIME3", "");
+  valveData.LiftTime4 = _prefs.getString("sLIFTTIME4", "");
+  valveData.LiftTime5 = _prefs.getString("sLIFTTIME5", "");
+  valveData.LiftTime6 = _prefs.getString("sLIFTTIME6", "");
+  valveData.LiftTime7 = _prefs.getString("sLIFTTIME7", "");
+  valveData.LiftTime8 = _prefs.getString("sLIFTTIME8", "");
+  valveData.LiftTime9 = _prefs.getString("sLIFTTIME9", "");
+  valveData.LiftTime10 = _prefs.getString("sLIFTTIME10", "");
+  valveData.LiftTime11 = _prefs.getString("sLIFTTIME11", "");
+  valveData.LiftTime12 = _prefs.getString("sLIFTTIME12", "");
 
   _prefs.end();
 
@@ -926,10 +967,43 @@ String DataHandler::buildIndexSSEJsonData()
   // sensorVal.FDiffType = 2;
 
 
-  if (1!=1) {  // TODO if message handler is active display the active message
-    dataJson["STATUS_MESSAGE"] = status.statusMessage;
-  } else { // else lets just show the uptime
-    dataJson["STATUS_MESSAGE"] = "Uptime: " + String(_hardware.uptime()) + " (hh.mm)";      
+  extern struct Language language;
+  bool isDefaultOrBlank = (status.statusMessage == "" || 
+                           status.statusMessage == language.LANG_NO_ERROR || 
+                           status.statusMessage == language.LANG_BLANK ||
+                           status.statusMessage == BOOT_MESSAGE);
+
+  String timeStampStr = "";
+  String fullTimeStr = "";
+
+  if (settings.iTIME_MODE > 0) {
+      char timeBuf[20];
+      char fullTimeBuf[30];
+      time_t now;
+      time(&now);
+      struct tm timeinfo;
+      if (localtime_r(&now, &timeinfo)) {
+          strftime(timeBuf, sizeof(timeBuf), "[%H:%M:%S] ", &timeinfo);
+          timeStampStr = String(timeBuf);
+          
+          strftime(fullTimeBuf, sizeof(fullTimeBuf), "%Y-%m-%d %H:%M:%S", &timeinfo);
+          fullTimeStr = String(fullTimeBuf);
+      } else {
+          timeStampStr = "[--:--:--] ";
+          fullTimeStr = "Time not set";
+      }
+  } else {
+      char uptimeBuf[20];
+      snprintf(uptimeBuf, sizeof(uptimeBuf), "[%.2f] ", _hardware.uptime());
+      timeStampStr = String(uptimeBuf);
+      
+      fullTimeStr = "Uptime: " + String(_hardware.uptime(), 2) + " (hh.mm)";
+  }
+
+  if (!isDefaultOrBlank) {
+      dataJson["STATUS_MESSAGE"] = timeStampStr + status.statusMessage;
+  } else {
+      dataJson["STATUS_MESSAGE"] = fullTimeStr;
   }
 
   // Active Orifice

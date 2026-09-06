@@ -22,6 +22,7 @@
 #include "structs.h"
 #include "messages.h"
 #include "datahandler.h"
+#include "sensors.h"
 
 #include <WiFi.h>
 #include <ESPmDNS.h>
@@ -90,6 +91,10 @@ void Comms::initaliseWifi() {
     WiFi.setAutoReconnect(true);
     WiFi.persistent(true);
     esp_wifi_set_ps(WIFI_PS_NONE); // ADC2 / Wifi STA fix - https://github.com/espressif/esp-idf/issues/3714
+    
+    // Perform Network Time Synchronization
+    Sensors _sensors;
+    _sensors.syncSystemTime();
     
   }  else  { // Go into AP Mode
     if (settings.ap_mode == true) { // AP mode is Default

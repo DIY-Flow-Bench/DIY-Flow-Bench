@@ -95,7 +95,20 @@ void Sensors::begin () {
 	config.mafCoeff5 = _maf.getCoefficient(5);
 	config.mafCoeff6 = _maf.getCoefficient(6);
 
-
+	// Initialise RTC
+	if (config.bRTC_ENABLED) {
+		_message.serialPrintf("Checking for DS1307 RTC: ( Address: %u )\n", config.iRTC_I2C_ADDR);
+		Wire.beginTransmission(config.iRTC_I2C_ADDR);
+		if (Wire.endTransmission() == 0) {
+			status.bRTC_PRESENT = true;
+			_message.serialPrintf("DS1307 RTC successfully detected!\n");
+			// Perform offline time bootstrapping
+			syncSystemTime();
+		} else {
+			status.bRTC_PRESENT = false;
+			_message.serialPrintf("DS1307 RTC NOT detected at I2C address.\n");
+		}
+	}
 
 	//initialise BME280
 	if (config.iBME_TYP == BOSCH_BME280) {
@@ -1204,4 +1217,95 @@ double Sensors::getRelHValue() {
 
 	return relativeHumidity;
 	
+}
+
+uint8_t Sensors::decToBcd(uint8_t val) {
+	return ((val / 10) << 4) + (val % 10);
+}
+
+uint8_t Sensors::bcdToDec(uint8_t val) {
+	return ((val >> 4) * 10) + (val & 0x0F);
+}
+
+bool Sensors::readRTC(int &year, int &month, int &day, int &hour, int &minute, int &second) {
+	extern struct Configuration config;
+	Wire.beginTransmission(config.iRTC_I2C_ADDR);
+	Wire.write(0x00); // Address pointer
+	if (Wire.endTransmission() != 0) {
+		return false; // RTC device not responding
+	}
+
+	Wire.requestFrom((int)config.iRTC_I2C_ADDR, 7);
+	if (Wire.available() < 7) {
+		return false;
+	}
+
+	second = bcdToDec(Wire.read() & 0x7F); // Mask off CH bit
+	minute = bcdToDec(Wire.read());
+	hour = bcdToDec(Wire.read() & 0x3F);   // Mask 24/12 hour mode
+	Wire.read(); // Skip day of week
+	day = bcdToDec(Wire.read());
+	month = bcdToDec(Wire.read());
+	year = bcdToDec(Wire.read()) + 2000;
+
+	return true;
+}
+
+bool Sensors::writeRTC(int year, int month, int day, int hour, int minute, int second) {
+	extern struct Configuration config;
+	Wire.beginTransmission(config.iRTC_I2C_ADDR);
+	Wire.write(0x00); // Address pointer
+	Wire.write(decToBcd(second) & 0x7F); // Clear osc CH bit
+	Wire.write(decToBcd(minute));
+	Wire.write(decToBcd(hour) & 0x3F);
+	Wire.write(decToBcd(1)); // Day of week (default to 1)
+	Wire.write(decToBcd(day));
+	Wire.write(decToBcd(month));
+	Wire.write(decToBcd(year % 100));
+	return (Wire.endTransmission() == 0);
+}
+
+void Sensors::syncSystemTime() {
+	extern struct BenchSettings settings;
+	extern struct Configuration config;
+	extern struct DeviceStatus status;
+	Messages _message;
+
+	_message.serialPrintf("Time Synchronization trigger. Mode = %d\n", settings.iTIME_MODE);
+
+	// Mode 1: Hardware RTC only (Offline bootstrap)
+	if (config.bRTC_ENABLED && status.bRTC_PRESENT) {
+		int year, month, day, hour, minute, second;
+		if (readRTC(year, month, day, hour, minute, second)) {
+			_message.serialPrintf("RTC read successful: %04d-%02d-%02d %02d:%02d:%02d\n", year, month, day, hour, minute, second);
+			struct tm tm;
+			tm.tm_year = year - 1900;
+			tm.tm_mon = month - 1;
+			tm.tm_mday = day;
+			tm.tm_hour = hour;
+			tm.tm_min = minute;
+			tm.tm_sec = second;
+			tm.tm_isdst = -1;
+			time_t t = mktime(&tm);
+			struct timeval tv = { .tv_sec = t, .tv_usec = 0 };
+			settimeofday(&tv, NULL);
+		}
+	}
+
+	// Mode 2 or 3: NTP / Network Time or Remote Server (after Wifi connected)
+	if (settings.iTIME_MODE == 2 || settings.iTIME_MODE == 3) {
+		String timeSrv = (settings.iTIME_MODE == 2) ? settings.sNTP_SERVER : settings.sREM_TIME_SRV;
+		_message.serialPrintf("Configuring NTP with server: %s timezone offset: %d hrs\n", timeSrv.c_str(), settings.iTZ_OFFSET);
+		configTime(settings.iTZ_OFFSET * 3600, 0, timeSrv.c_str());
+
+		// Wait slightly (non-blocking yield) so we can obtain the epoch time and save it to the RTC
+		struct tm timeinfo;
+		if (getLocalTime(&timeinfo, 2000)) { // wait up to 2 seconds for NTP sync
+			_message.serialPrintf("NTP synchronized cleanly! Local time: %s\n", asctime(&timeinfo));
+			if (config.bRTC_ENABLED && status.bRTC_PRESENT) {
+				writeRTC(timeinfo.tm_year + 1900, timeinfo.tm_mon + 1, timeinfo.tm_mday, timeinfo.tm_hour, timeinfo.tm_min, timeinfo.tm_sec);
+				_message.serialPrintf("Synchronized time written to physical DS1307 RTC over I2C.\n");
+			}
+		}
+	}
 }

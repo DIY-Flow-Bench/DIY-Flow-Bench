@@ -138,6 +138,26 @@
                 <option value='3' ~iDATAGRAPH_MAX_3~>1000 cfm</option>
               </select>
             </fieldset>
+
+            <fieldset>
+              <legend>Time &amp; Timestamp Settings</legend>
+              <label class="config-label">Time Sync Source:</label>
+              <select name='iTIME_MODE' class='config-select'>
+                <option value='0' ~iTIME_MODE_0~>Off (No Timestamps / Use Uptime)</option>
+                <option value='1' ~iTIME_MODE_1~>Hardware RTC (DS1307)</option>
+                <option value='2' ~iTIME_MODE_2~>Network Time (NTP pool)</option>
+                <option value='3' ~iTIME_MODE_3~>Remote Time Server</option>
+              </select>
+              <br>
+              <label class="config-label">Timezone GMT Offset (hrs):</label>
+              <input type="number" name="iTZ_OFFSET" value="~iTZ_OFFSET~" step="1" class="config-text">
+              <br>
+              <label class="config-label">NTP Server Pool:</label>
+              <input type="text" name="sNTP_SERVER" value="~sNTP_SERVER~" class="config-text">
+              <br>
+              <label class="config-label">Remote Time Server:</label>
+              <input type="text" name="sREM_TIME_SRV" value="~sREM_TIME_SRV~" class="config-text">
+            </fieldset>
       
           </div>
           <div class="float-right"><input id="save-config-button" type="submit" class="button" value="Save"></div>

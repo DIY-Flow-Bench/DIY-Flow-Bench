@@ -350,6 +350,43 @@ void Webserver::begin()
   // Save Configuration Form
   server->on("/api/saveconfig", HTTP_POST, saveConfigurationForm);
 
+  // Set Time Manually via Form
+  server->on("/api/set_time", HTTP_POST, [](AsyncWebServerRequest *request){
+    Messages _message;
+    Sensors _sensors;
+    int year = 0, month = 0, day = 0, hour = 0, minute = 0, second = 0;
+    if (request->hasParam("year", true)) year = request->getParam("year", true)->value().toInt();
+    if (request->hasParam("month", true)) month = request->getParam("month", true)->value().toInt();
+    if (request->hasParam("day", true)) day = request->getParam("day", true)->value().toInt();
+    if (request->hasParam("hour", true)) hour = request->getParam("hour", true)->value().toInt();
+    if (request->hasParam("minute", true)) minute = request->getParam("minute", true)->value().toInt();
+    if (request->hasParam("second", true)) second = request->getParam("second", true)->value().toInt();
+
+    if (year >= 2000 && month >= 1 && month <= 12 && day >= 1 && day <= 31 && hour >= 0 && hour <= 23 && minute >= 0 && minute <= 59) {
+      _message.serialPrintf("Manual set time received: %04d-%02d-%02d %02d:%02d:%02d\n", year, month, day, hour, minute, second);
+      
+      // Update RTC
+      _sensors.writeRTC(year, month, day, hour, minute, second);
+      
+      // Update system clock
+      struct tm tm;
+      tm.tm_year = year - 1900;
+      tm.tm_mon = month - 1;
+      tm.tm_mday = day;
+      tm.tm_hour = hour;
+      tm.tm_min = minute;
+      tm.tm_sec = second;
+      tm.tm_isdst = -1;
+      time_t t = mktime(&tm);
+      struct timeval tv = { .tv_sec = t, .tv_usec = 0 };
+      settimeofday(&tv, NULL);
+      
+      request->send(200, "text/plain", "Time updated successfully");
+    } else {
+      request->send(400, "text/plain", "Invalid time parameters");
+    }
+  });
+
   // Save Pins Form
   server->on("/api/savepins", HTTP_POST, savePinsForm);
 
@@ -932,6 +969,23 @@ void Webserver::saveLiftDataForm(AsyncWebServerRequest *request){
         
   }
 
+  // Generate Timestamp or fallback Uptime for this capture
+  extern struct DeviceStatus status;
+  String currentTimestamp = "";
+  if (settings.iTIME_MODE > 0) {
+    char timeBuf[32];
+    time_t now;
+    time(&now);
+    struct tm timeinfo;
+    localtime_r(&now, &timeinfo);
+    strftime(timeBuf, sizeof(timeBuf), "%Y-%m-%d %H:%M:%S", &timeinfo);
+    currentTimestamp = String(timeBuf);
+  } else {
+    char uptimeBuf[32];
+    snprintf(uptimeBuf, sizeof(uptimeBuf), "Uptime: %.2f hr", (millis() - status.boot_time) / 3600000.0);
+    currentTimestamp = String(uptimeBuf);
+  }
+
   // Update lift point data
   switchval = stoi(liftPoint.c_str()); // convert std::str to int
 
@@ -939,50 +993,62 @@ void Webserver::saveLiftDataForm(AsyncWebServerRequest *request){
 
     case 1:
       valveData.LiftData1 = flowValue;
+      valveData.LiftTime1 = currentTimestamp;
       break;
 
     case 2:
       valveData.LiftData2 = flowValue;
+      valveData.LiftTime2 = currentTimestamp;
       break;
 
     case 3:
       valveData.LiftData3 = flowValue;
+      valveData.LiftTime3 = currentTimestamp;
       break;
 
     case 4:
       valveData.LiftData4 = flowValue;
+      valveData.LiftTime4 = currentTimestamp;
       break;
 
     case 5:
       valveData.LiftData5 = flowValue;
+      valveData.LiftTime5 = currentTimestamp;
       break;
 
     case 6:
       valveData.LiftData6 = flowValue;
+      valveData.LiftTime6 = currentTimestamp;
       break;
 
     case 7:
       valveData.LiftData7 = flowValue;
+      valveData.LiftTime7 = currentTimestamp;
       break;
 
     case 8:
       valveData.LiftData8 = flowValue;
+      valveData.LiftTime8 = currentTimestamp;
       break;
 
     case 9:
       valveData.LiftData9 = flowValue;
+      valveData.LiftTime9 = currentTimestamp;
       break;
 
     case 10:
       valveData.LiftData10 = flowValue;
+      valveData.LiftTime10 = currentTimestamp;
       break;
 
     case 11:
       valveData.LiftData11 = flowValue;
+      valveData.LiftTime11 = currentTimestamp;
       break;
 
     case 12:
       valveData.LiftData12 = flowValue;
+      valveData.LiftTime12 = currentTimestamp;
       break;
   }
 
@@ -1001,6 +1067,19 @@ void Webserver::saveLiftDataForm(AsyncWebServerRequest *request){
   _prefs.putDouble("LIFTDATA10", valveData.LiftData10);
   _prefs.putDouble("LIFTDATA11", valveData.LiftData11);
   _prefs.putDouble("LIFTDATA12", valveData.LiftData12);
+
+  _prefs.putString("sLIFTTIME1", valveData.LiftTime1);
+  _prefs.putString("sLIFTTIME2", valveData.LiftTime2);
+  _prefs.putString("sLIFTTIME3", valveData.LiftTime3);
+  _prefs.putString("sLIFTTIME4", valveData.LiftTime4);
+  _prefs.putString("sLIFTTIME5", valveData.LiftTime5);
+  _prefs.putString("sLIFTTIME6", valveData.LiftTime6);
+  _prefs.putString("sLIFTTIME7", valveData.LiftTime7);
+  _prefs.putString("sLIFTTIME8", valveData.LiftTime8);
+  _prefs.putString("sLIFTTIME9", valveData.LiftTime9);
+  _prefs.putString("sLIFTTIME10", valveData.LiftTime10);
+  _prefs.putString("sLIFTTIME11", valveData.LiftTime11);
+  _prefs.putString("sLIFTTIME12", valveData.LiftTime12);
 
   _prefs.end();
     
@@ -1034,6 +1113,19 @@ String Webserver::getLiftDataJSON()
   liftData["LIFTDATA10"] = valveData.LiftData10;
   liftData["LIFTDATA11"] = valveData.LiftData11;
   liftData["LIFTDATA12"] = valveData.LiftData12;
+
+  liftData["LIFTTIME1"] = valveData.LiftTime1;
+  liftData["LIFTTIME2"] = valveData.LiftTime2;
+  liftData["LIFTTIME3"] = valveData.LiftTime3;
+  liftData["LIFTTIME4"] = valveData.LiftTime4;
+  liftData["LIFTTIME5"] = valveData.LiftTime5;
+  liftData["LIFTTIME6"] = valveData.LiftTime6;
+  liftData["LIFTTIME7"] = valveData.LiftTime7;
+  liftData["LIFTTIME8"] = valveData.LiftTime8;
+  liftData["LIFTTIME9"] = valveData.LiftTime9;
+  liftData["LIFTTIME10"] = valveData.LiftTime10;
+  liftData["LIFTTIME11"] = valveData.LiftTime11;
+  liftData["LIFTTIME12"] = valveData.LiftTime12;
 
   // serializeJson(liftData, jsonString);
   serializeJsonPretty(liftData, jsonString);
@@ -1077,6 +1169,19 @@ void Webserver::clearLiftData (AsyncWebServerRequest *request) {
   _prefs.putDouble("LIFTDATA11", 0.0);
   _prefs.putDouble("LIFTDATA12", 0.0);
 
+  _prefs.putString("sLIFTTIME1", "");
+  _prefs.putString("sLIFTTIME2", "");
+  _prefs.putString("sLIFTTIME3", "");
+  _prefs.putString("sLIFTTIME4", "");
+  _prefs.putString("sLIFTTIME5", "");
+  _prefs.putString("sLIFTTIME6", "");
+  _prefs.putString("sLIFTTIME7", "");
+  _prefs.putString("sLIFTTIME8", "");
+  _prefs.putString("sLIFTTIME9", "");
+  _prefs.putString("sLIFTTIME10", "");
+  _prefs.putString("sLIFTTIME11", "");
+  _prefs.putString("sLIFTTIME12", "");
+
   valveData.LiftData1 = 0.0;
   valveData.LiftData2 = 0.0;
   valveData.LiftData3 = 0.0;
@@ -1089,6 +1194,19 @@ void Webserver::clearLiftData (AsyncWebServerRequest *request) {
   valveData.LiftData10 = 0.0;
   valveData.LiftData11 = 0.0;
   valveData.LiftData12 = 0.0;
+
+  valveData.LiftTime1 = "";
+  valveData.LiftTime2 = "";
+  valveData.LiftTime3 = "";
+  valveData.LiftTime4 = "";
+  valveData.LiftTime5 = "";
+  valveData.LiftTime6 = "";
+  valveData.LiftTime7 = "";
+  valveData.LiftTime8 = "";
+  valveData.LiftTime9 = "";
+  valveData.LiftTime10 = "";
+  valveData.LiftTime11 = "";
+  valveData.LiftTime12 = "";
 
   _prefs.end();
 
@@ -1532,7 +1650,47 @@ String Webserver::processSettingsPageTemplate(const String &var) {
   if (var == "BARO_SENSOR") return String(status.baroSensor);
   if (var == "PITOT_SENSOR") return String(status.pitotSensor);
   if (var == "PDIFF_SENSOR") return String(status.pdiffSensor);
-  if (var == "STATUS_MESSAGE") return String(status.statusMessage);
+  if (var == "STATUS_MESSAGE") {
+      Hardware _hardware;
+      extern struct Language language;
+      bool isDefaultOrBlank = (status.statusMessage == "" || 
+                               status.statusMessage == language.LANG_NO_ERROR || 
+                               status.statusMessage == language.LANG_BLANK ||
+                               status.statusMessage == BOOT_MESSAGE);
+
+      String timeStampStr = "";
+      String fullTimeStr = "";
+
+      if (settings.iTIME_MODE > 0) {
+          char timeBuf[20];
+          char fullTimeBuf[30];
+          time_t now;
+          time(&now);
+          struct tm timeinfo;
+          if (localtime_r(&now, &timeinfo)) {
+              strftime(timeBuf, sizeof(timeBuf), "[%H:%M:%S] ", &timeinfo);
+              timeStampStr = String(timeBuf);
+              
+              strftime(fullTimeBuf, sizeof(fullTimeBuf), "%Y-%m-%d %H:%M:%S", &timeinfo);
+              fullTimeStr = String(fullTimeBuf);
+          } else {
+              timeStampStr = "[--:--:--] ";
+              fullTimeStr = "Time not set";
+          }
+      } else {
+          char uptimeBuf[20];
+          snprintf(uptimeBuf, sizeof(uptimeBuf), "[%.2f] ", _hardware.uptime());
+          timeStampStr = String(uptimeBuf);
+          
+          fullTimeStr = "Uptime: " + String(_hardware.uptime(), 2) + " (hh.mm)";
+      }
+
+      if (!isDefaultOrBlank) {
+          return timeStampStr + status.statusMessage;
+      } else {
+          return fullTimeStr;
+      }
+  }
 
 
   // Datagraph capture standard
@@ -1765,9 +1923,15 @@ String Webserver::processSettingsPageTemplate(const String &var) {
     } 
   }
 
+  // Time and Timestamp Settings
+  if (var == "iTIME_MODE_0" && settings.iTIME_MODE == 0) return String("selected");
+  if (var == "iTIME_MODE_1" && settings.iTIME_MODE == 1) return String("selected");
+  if (var == "iTIME_MODE_2" && settings.iTIME_MODE == 2) return String("selected");
+  if (var == "iTIME_MODE_3" && settings.iTIME_MODE == 3) return String("selected");
 
-
-
+  if (var == "iTZ_OFFSET") return String(settings.iTZ_OFFSET);
+  if (var == "sNTP_SERVER") return settings.sNTP_SERVER;
+  if (var == "sREM_TIME_SRV") return settings.sREM_TIME_SRV;
 
   return "";
 }
@@ -1977,6 +2141,17 @@ String Webserver::processConfigPageTemplate(const String &var) {
   // if (var == "dFIXED_RELH_VAL" ) return String(config.dFIXED_RELH_VAL);
   // if (var == "dRELH_ALG_SCALE" ) return String(config.dRELH_ALG_SCALE);
   
+  // RTC values
+  if (var == "bRTC_ENABLED_0" && config.bRTC_ENABLED == 0) return String("selected");
+  if (var == "bRTC_ENABLED_1" && config.bRTC_ENABLED == 1) return String("selected");
+  if (var == "iRTC_I2C_ADDR") return String(config.iRTC_I2C_ADDR);
+  if (var == "sRTC_STATUS") {
+      if (status.bRTC_PRESENT) {
+          return "Status OK (Module Present)";
+      } else {
+          return "NOT DETECTED";
+      }
+  }
 
   return "";
 }

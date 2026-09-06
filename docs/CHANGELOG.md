@@ -26,6 +26,10 @@ https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/.github/CONTRIBUTIN
 Build Number    | Description of Change
 --              | --
 
+2609060004		| Timestamp support added 
+				| DS1307 I2C RTC BOB support added
+				| NTP synchronisation added
+				| GUI datetime display
 2609060001		| Up-rev to V2.0
 2502110001      | Up-rev to RC9
                 | Graph download link fallback to target="_blank"
