@@ -8,12 +8,12 @@
  * 
  * @brief define variables, configure hardware + main program loop
  * 
- * @remarks For more information please visit the WIKI on our GitHub project page: https://github.com/DeeEmm/DIY-Flow-Bench/wiki
- * Or join our support forums: https://github.com/DeeEmm/DIY-Flow-Bench/discussions
+ * @remarks For more information please visit the WIKI on our GitHub project page: https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki
+ * Or join our support forums: https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions
  * You can also visit our Facebook community: https://www.facebook.com/groups/diyflowbench/
  * 
  * @license Except where noted this project and all associated files are provided for use under the GNU GPL3 license:
- * https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/LICENSE
+ * https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/LICENSE
  * 
  * The standard project board is the ESP32DUINO used in conjunction with the DIY-Flow-Bnch shield
  * Other ESP32 based boards and custom shields can be made to work. 

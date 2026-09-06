@@ -8,12 +8,12 @@
  * 
  * @brief Define MAF data
  * 
- * @remarks For more information please visit the WIKI on our GitHub project page: https://github.com/DeeEmm/DIY-Flow-Bench/wiki
- * Or join our support forums: https://github.com/DeeEmm/DIY-Flow-Bench/discussions
+ * @remarks For more information please visit the WIKI on our GitHub project page: https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki
+ * Or join our support forums: https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions
  * You can also visit our Facebook community: https://www.facebook.com/groups/diyflowbench/
  * 
  * @license This project and all associated files are provided for use under the GNU GPL3 license:
- * https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/LICENSE
+ * https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/LICENSE
  * 
  ***/
 #pragma once
@@ -101,16 +101,16 @@ public:
     };
 
     String mafLink[NUM_MAF_TYPES] = {
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/142",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/138",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/319",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/339",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/346",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/347",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/348",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/349",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/357",
-        "https://github.com/DeeEmm/DIY-Flow-Bench/discussions/141"
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/142",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/138",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/319",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/339",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/346",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/347",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/348",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/349",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/357",
+        "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/141"
     };
   
     // MafData() : currentMafType(ACDELCO_92281162) {}

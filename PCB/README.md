@@ -1,4 +1,4 @@
-<img width="2032" alt="PCB 3D View" src="https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/PCB/PCB%203D.png?raw=true">
+<img width="2032" alt="PCB 3D View" src="https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/PCB/PCB%203D.png?raw=true">
 
 ## The DIY Flow Bench project
 
@@ -8,7 +8,7 @@
 
 Open source flow bench project to measure and display volumetric air flow using an ESP32 / MAF.
 
-For more information please visit the [WIKI](https://github.com/DeeEmm/DIY-Flow-Bench/wiki) Or join our [support forums](https://github.com/DeeEmm/DIY-Flow-Bench/discussions) 
+For more information please visit the [WIKI](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki) Or join our [support forums](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions) 
 
 The PCB design and all associated files are provided for use under the CERN–OHL–W license which allows people to make their own derivative designs provided that attribution is provided and that any derivative design is also made publicly available. 
 
@@ -29,15 +29,15 @@ The DIYFB Software is provided under the GPL3 license. More details can be found
 
 ## Schematic
 
-![Schematic_DIY-FLOW-BENCH-V2-3](https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/PCB/Schematic_DIY-FLOW-BENCH-V2-3.jpg?raw=true)
-[Schematic_DIY-FLOW-BENCH-V2-3.pdf](https://github.com/DeeEmm/DIY-Flow-Bench/files/11220199/Schematic_DIY-FLOW-BENCH-V2-3.pdf)
+![Schematic_DIY-FLOW-BENCH-V2-3](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/PCB/Schematic_DIY-FLOW-BENCH-V2-3.jpg?raw=true)
+[Schematic_DIY-FLOW-BENCH-V2-3.pdf](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/files/11220199/Schematic_DIY-FLOW-BENCH-V2-3.pdf)
 
 
 ## BOM
 
 You can view the BOM at the following link 
 
-https://htmlpreview.github.io/?https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/docs/iBom-DIY-FLOW-BENCH-V2-3.html
+https://htmlpreview.github.io/?https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/docs/iBom-DIY-FLOW-BENCH-V2-3.html
 
 This will open up an interactive BOM and schematic layout which allows you to view component locations on the PCB
 

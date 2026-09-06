@@ -8,12 +8,12 @@
  * 
  * @brief Webserver class
  * 
- * @remarks For more information please visit the WIKI on our GitHub project page: https://github.com/DeeEmm/DIY-Flow-Bench/wiki
- * Or join our support forums: https://github.com/DeeEmm/DIY-Flow-Bench/discussions
+ * @remarks For more information please visit the WIKI on our GitHub project page: https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki
+ * Or join our support forums: https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions
  * You can also visit our Facebook community: https://www.facebook.com/groups/diyflowbench/
  * 
  * @license This project and all associated files are provided for use under the GNU GPL3 license:
- * https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/LICENSE
+ * https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/LICENSE
  * 
  ***/
 #include "Arduino.h"
@@ -1412,25 +1412,25 @@ String Webserver::processLandingPageTemplate(const String &var) {
   extern struct DeviceStatus status;
 
   // if (var == "INDEX_STATUS") {
-  //   if (status.GUIexists == false) return String("<a href='https://github.com/DeeEmm/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/release/' target='_BLANK'>index.html</a>");    
+  //   if (status.GUIexists == false) return String("<a href='https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/release/' target='_BLANK'>index.html</a>");    
   //   // if (!SPIFFS.exists(status.indexFilename)) return String("index.html");
   // }  
   
   // if (var == "SETTINGS_STATUS") {
-  //   if (!SPIFFS.exists("/settings.json")) return String("<a href='https://github.com/DeeEmm/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/release/' target='_BLANK'>settings.json</a>");
+  //   if (!SPIFFS.exists("/settings.json")) return String("<a href='https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/release/' target='_BLANK'>settings.json</a>");
   // }
 
   if (var == "PINS_STATUS" ) {
-    if (status.pinsLoaded == false) return String("<a href='https://github.com/DeeEmm/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/pins/' target='_BLANK'>pins.json</a>");    
+    if (status.pinsLoaded == false) return String("<a href='https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/pins/' target='_BLANK'>pins.json</a>");    
     // if (!SPIFFS.exists(status.pinsFilename)) return String("PINS_***.json");    
   }
 
   if (var == "MAF_STATUS" ) {
-    if (status.mafLoaded == false) return String("<a href='https://github.com/DeeEmm/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/mafData/' target='_BLANK'>maf.json</a>");    
+    if (status.mafLoaded == false) return String("<a href='https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/mafData/' target='_BLANK'>maf.json</a>");    
   }
 
   if (var == "CONFIGURATION_STATUS") {
-    if (!SPIFFS.exists("/configuration.json")) return String("<a href='https://github.com/DeeEmm/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/' target='_BLANK'>configuration.json</a>");
+    if (!SPIFFS.exists("/configuration.json")) return String("<a href='https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/tree/master/ESP32/DIY-Flow-Bench/' target='_BLANK'>configuration.json</a>");
   }
 
   return "";

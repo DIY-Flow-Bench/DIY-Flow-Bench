@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/DeeEmm/DIY-Flow-Bench.git"
+    "url": "git+https://github.com/DIY-Flow-Bench/DIY-Flow-Bench.git"
   },
   "author": "DeeEmm",
   "license": "GPL-3.0-or-later",
   "bugs": {
-    "url": "https://github.com/DeeEmm/DIY-Flow-Bench/issues"
+    "url": "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/issues"
   },
-  "homepage": "https://github.com/DeeEmm/DIY-Flow-Bench#readme",
+  "homepage": "https://github.com/DIY-Flow-Bench/DIY-Flow-Bench#readme",
   "dependencies": {
     "array-initial": "^1.1.0",
     "gulp-clean": "^0.4.0",

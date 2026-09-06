@@ -1,5 +1,5 @@
 # mafTransferFunctionGenerator.py
-# This file is part of the DIY FLow Bench Project. https//github.com/DeeEmm/DIY-Flow-Bench
+# This file is part of the DIY FLow Bench Project. https//github.com/DIY-Flow-Bench/DIY-Flow-Bench
 # Author: DeeEmm
 # Description: This script reads the MAF sensor data from mafData.json file and fits a polynomial, exponential, and power law function to the data. 
 # The best fit is then plotted along with the raw data. 
