@@ -34,6 +34,6 @@ body:
     label: Posting Guidelines
     description: The posting guidelines outline how to use the forums. Please familiarise yourself with them.
     options:
-      - label: I have read the [Posting Guidelines](https://github.com/DeeEmm/DIY-Flow-Bench/discussions/133)
+      - label: I have read the [Posting Guidelines](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/133)
         required: true
     

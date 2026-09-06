@@ -66,6 +66,17 @@ Whilst we do not employ any specific coding standards, we do however have some v
 Essentially it's all about making the code easy for others to read and follow. Remember that this is an open source project so people of all skill levels will be using it and trying to decypher what's going on. Also, please consider that the more help that is provided within the code in the form of comments, the less real-world help will be required to get people up and running, which will help minimise the real-world resources needed to support the project.
 
 
+### AI and Vibe coding
+
+Since last looking at this project, vibe coding has entered the toolbox of the general public. This is of course a massive leap in progress for the open source community, as it allows less experienced coders and novices alike to produce usable code. Theoretically this means that we should see faster progress and develoment and have more contributors.
+
+At this point in time I (DeeEmm) have not seen this, but with an eye on the future, I do not have an issue with AI generated contributions, as long as they align with the projects overall philosophies. All contrinutions need to follow the coding expectations / stadnards outlined within this document and adapt to the general coding style presented throughout the project. THis applies to AI and non-AI contributions alike.
+
+Vibe coding also allows people to take the work already done within the project and easily tailor it to thier own needs. When this is done without feeding those changes and developments back into the community project, by creating pull requests, it stifles project progress. So we invite all people who use our code to circle back to the project with thier changes, so that the wider community can benefit. Otherwise what will eventually happen is that Vibe coding will simply kill the open source community. 
+
+The entire open source community has evolved out of the generosity of the few, creating solutions for the many. This is part altruistic, part self serving, but always done with the intent that it is a two way street. So if you create something using the code within this project. Share it with the project community.
+
+
 ## Version control
 
 As the project is hosted by GitHub it makes sense to utilise the GIT versioning system. This allows simultaneous colloboration by multiple parties and manages differences between the commits of all parties. 

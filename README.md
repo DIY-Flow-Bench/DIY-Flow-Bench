@@ -2,25 +2,9 @@
 
 <img width="1685" alt="Screenshot 2025-02-05 at 9 25 02 am" src="https://github.com/user-attachments/assets/292fc2ce-8127-414c-bd53-92f48974e900" />
 
-![GitHub forks](https://img.shields.io/github/forks/deeemm/diy-flow-bench?style=social) &nbsp;&nbsp; ![GitHub Repo stars](https://img.shields.io/github/stars/deeemm/diy-flow-bench?style=social) &nbsp;&nbsp; ![GitHub all releases](https://img.shields.io/github/downloads-pre/deeemm/diy-flow-bench/total?logo=github&include_prereleases=true) &nbsp;&nbsp; ![GitHub issues](https://img.shields.io/github/issues-raw/deeemm/diy-flow-bench?logo=github) &nbsp;&nbsp; ![GitHub contributors](https://img.shields.io/github/contributors/deeemm/diy-flow-bench?logo=github) &nbsp;&nbsp; ![Discord](https://img.shields.io/discord/762654320444440587?logo=discord) &nbsp;&nbsp; ![GitHub](https://img.shields.io/github/license/deeemm/diy-flow-bench?logo=gnu) 
-
-## Version Information
-###
-
-General Version V2.0-RC.X
+![GitHub forks](https://img.shields.io/github/forks/DIY-Flow-Bench/DIY-Flow-Bench?style=social) &nbsp;&nbsp; ![GitHub Repo stars](https://img.shields.io/github/stars/DIY-Flow-Bench/DIY-Flow-Bench?style=social) &nbsp;&nbsp; ![GitHub all releases](https://img.shields.io/github/downloads-pre/DIY-Flow-Bench/DIY-Flow-Bench/total?logo=github&include_prereleases=true) &nbsp;&nbsp; ![GitHub issues](https://img.shields.io/github/issues-raw/DIY-Flow-Bench/DIY-Flow-Bench?logo=github) &nbsp;&nbsp; ![GitHub contributors](https://img.shields.io/github/contributors/DIY-Flow-Bench/DIY-Flow-Bench?logo=github) &nbsp;&nbsp; ![Discord](https://img.shields.io/discord/762654320444440587?logo=discord) &nbsp;&nbsp; ![GitHub](https://img.shields.io/github/license/DIY-Flow-Bench/DIY-Flow-Bench?logo=gnu) 
 
 
-[Download the latest official stable release](https://github.com/DeeEmm/DIY-Flow-Bench/releases)
-
-[Download current development version](https://github.com/DeeEmm/DIY-Flow-Bench/tree/DEV)
-
-NOTE: This project is still in active development and is currently at Release Candidate stage. The codebase is stable and functional and we are working towards a final software and hardware release "Version 2".
-
-It should be noted that the development [DEV] branch contains all current changes and is the most up to date, but may contain unvalidated changes.
-
-The [Master] branch is level with the current stable release but will always be behind the [DEV] branch.
-
-If you are interested in contributing with testing please head over to our [discussion forums](https://github.com/DeeEmm/DIY-Flow-Bench/discussions) or [Discord](https://discord.gg/eAbktJj) channel.
 
 
 ## What is a Flow Bench?
@@ -75,16 +59,30 @@ The hardware aspect of the project comprises of a PCB (commonly known as a 'shie
 - DIY Shield kits available to purchase.
 
 
+## Version Information
+###
+
+General Version V2.0
+
+
+[Download the latest official stable release](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/releases)
+
+The [Master] branch is level with the current stable release.
+
+
+
 ## Development Info
 
-The [MASTER branch](https://github.com/DeeEmm/DIY-Flow-Bench/tree/master) contains the current release. 
+The [MASTER branch](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/tree/master) contains the current release. 
 
 
-The [DEV branch](https://github.com/DeeEmm/DIY-Flow-Bench/tree/DEV) contains the most up to date code, but may still be undergoing testing and development. 
+The [DEV branch](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/tree/DEV) contains the most up to date code, including aggregated code changes developed on individual featire bracnhes.
 
-Generally the code inthe DEV branch is stable, but may it include unvalidated changes, so use with caution. It is advisable to be up-to-date with current development discussions on the forums to understand the current DEV branch status
+Generally the code in the DEV branch is stable, but may it include unvalidated changes, so use with caution. It is advisable to be up-to-date with current development discussions on the forums to understand the current DEV branch status
 
 When appropriate. The changes on DEV are validated and then the DEV branch are pulled into master to create a new release.
+
+If you are interested in contributing with testing please head over to our [discussion forums](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions) or [Discord](https://discord.gg/eAbktJj) channel and please familiarise yourself with the [Contribution Guidelies](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/.github/CONTRIBUTING.md) 
 
 
 ## Installation
@@ -97,7 +95,7 @@ Binaries can be uploaded to the ESP32 directly using the [DIYFB Firmware Flashin
 
 (_Tested on Mac OS 15.0.1 Sequoia / Windows 10/11._)
 
-Current Firmware binaries can be downloaded from the [Releases](https://github.com/DeeEmm/DIY-Flow-Bench/releases) section of the repo
+Current Firmware binaries can be downloaded from the [Releases](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/releases) section of the repo
 
 
 ## Reporting Issues
@@ -108,22 +106,22 @@ If you use this code and have found issues or have comments relating to the rele
 - Comment in the support thread for the current release version
 - Create a discussion or hit us up at our Discord channel.
 
-- [Bugtracker](https://github.com/DeeEmm/DIY-Flow-Bench/issues)
-- [Discussion for current version](https://github.com/DeeEmm/DIY-Flow-Bench/discussions) (Pinned to top of page)
+- [Bugtracker](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/issues)
+- [Discussion for current version](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions) (Pinned to top of page)
 - [Discord Chat](https://discord.gg/eAbktJj)
 
-Please note that support is only provided for the current release so make sure that you are up to date and running the most [current version](https://github.com/DeeEmm/DIY-Flow-Bench/releases).
+Please note that support is only provided for the current release so make sure that you are up to date and running the most [current version](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/releases).
 
 
 ## Support
 
-Documentation is provided for installation, configuration and use in the [WIKI](https://github.com/DeeEmm/DIY-Flow-Bench/wiki).
+Documentation is provided for installation, configuration and use in the [WIKI](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki).
 
-If you get stuck, feel free to create a [discussion](https://github.com/DeeEmm/DIY-Flow-Bench/discussions/) in the support forum, or see if anyone is available over on the [Discord](https://discord.gg/eAbktJj) channel.
+If you get stuck, feel free to create a [discussion](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions/) in the support forum, or see if anyone is available over on the [Discord](https://discord.gg/eAbktJj) channel.
 
-If you find a bug, or have a feature request, please [raise an issue](https://github.com/DeeEmm/DIY-Flow-Bench/issues)
+If you find a bug, or have a feature request, please [raise an issue](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/issues)
 
-**PLEASE NOTE that support is NOT provided via Facebook or via DM.**
+**PLEASE NOTE that support is NOT provided via Facebook, email or via DM.**
 
 
 ## License
@@ -146,7 +144,7 @@ The DIYFB project is released under an open source license to allow the end user
 
 Community projects completely rely on community contributions. If you use the DIYFB project, and have made improvements or changes that you think might benefit the community, please consider sharing those changes so that everyone in the community can benefit. Likewise, if you have something to say about the project, how it works, or how it can be improved, please share your thoughts. 
 
-For more information on contributing to the project please see the [Contribution Guidelines](https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/.github/CONTRIBUTING.md)
+For more information on contributing to the project please see the [Contribution Guidelines](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/.github/CONTRIBUTING.md)
 
 
 
@@ -162,8 +160,8 @@ You can view an online demo of the Web UI at the followng link
 ## Further Information
 ###
 
-- [Project WIKI]( https://github.com/DeeEmm/DIY-Flow-Bench/wiki)
-- [Github repository](https://github.com/DeeEmm/DIY-Flow-Bench)
-- [Support forums](https://github.com/DeeEmm/DIY-Flow-Bench/discussions) 
+- [Project WIKI]( https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki)
+- [Github repository](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench)
+- [Support forums](https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions) 
 - [Discord](https://discord.gg/eAbktJj)
 - [Join our project community](https://www.facebook.com/groups/diyflowbench/)

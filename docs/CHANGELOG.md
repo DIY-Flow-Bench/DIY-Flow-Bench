@@ -7,13 +7,13 @@ https://github.com/users/DeeEmm/projects/5/
 
 ## Open Issues
 
-https://github.com/DeeEmm/DIY-Flow-Bench/issues
+https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/issues
 
 
 
 ## Contribution Guidelines
 
-https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/.github/CONTRIBUTING.md
+https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/.github/CONTRIBUTING.md
 
 
 
@@ -24,7 +24,9 @@ https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/.github/CONTRIBUTING.md
 - Build number is automatically created in version.json at compile time
 
 Build Number    | Description of Change
--- | --
+--              | --
+
+2609060001		| Up-rev to V2.0
 2502110001      | Up-rev to RC9
                 | Graph download link fallback to target="_blank"
                 | Update Documentation

@@ -1,5 +1,5 @@
 # user_actions_pre.py
-# This file is part of the DIY FLow Bench Project. https//github.com/DeeEmm/DIY-Flow-Bench
+# This file is part of the DIY FLow Bench Project. https//github.com/DIY-Flow-Bench/DIY-Flow-Bench
 # Author: DeeEmm
 import json
 import sys

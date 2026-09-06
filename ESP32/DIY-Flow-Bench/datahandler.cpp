@@ -9,12 +9,12 @@
  * @brief Data Handler class
  * @note contols data exchange / file management 
  * 
- * @remarks For more information please visit the WIKI on our GitHub project page: https://github.com/DeeEmm/DIY-Flow-Bench/wiki
- * Or join our support forums: https://github.com/DeeEmm/DIY-Flow-Bench/discussions
+ * @remarks For more information please visit the WIKI on our GitHub project page: https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki
+ * Or join our support forums: https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/discussions
  * You can also visit our Facebook community: https://www.facebook.com/groups/diyflowbench/
  * 
  * @license This project and all associated files are provided for use under the GNU GPL3 license:
- * https://github.com/DeeEmm/DIY-Flow-Bench/blob/master/LICENSE
+ * https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/LICENSE
  * 
  ***/
 
@@ -78,7 +78,7 @@ void DataHandler::begin() {
     // NOTE: RELEASE and BUILD_NUMBER are defined at compile time within extra_scripts directive in user_actions_pre.py 
     _message.serialPrintf("DIYFB Version: %s \nBuild: %s \n", RELEASE, BUILD_NUMBER);                                         
     _message.serialPrintf("For help please visit the WIKI:\n");                                         
-    _message.serialPrintf("https://github.com/DeeEmm/DIY-Flow-Bench/wiki\n");                                         
+    _message.serialPrintf("https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/wiki\n");                                         
 
     // Load configuration / settings / calibration / liftdata / pins data from NVM
     this->initialiseConfig();
@@ -1086,7 +1086,7 @@ String DataHandler::buildMimicSSEJsonData() {
  * @returns payload: contents of remote file
  * @note Currently no validation is carried out
  ***/
-String DataHandler::getRemote(const char* serverName = "https://raw.githubusercontent.com/DeeEmm/DIY-Flow-Bench/refs/heads/DEV/ESP32/DIY-Flow-Bench/version.json") {
+String DataHandler::getRemote(const char* serverName = "https://raw.githubusercontent.com/DIY-Flow-Bench/DIY-Flow-Bench/refs/heads/DEV/ESP32/DIY-Flow-Bench/version.json") {
   HTTPClient http;
 
   Messages _message;
