@@ -660,36 +660,20 @@ void DataHandler::initialiseLiftData () {
   Preferences _prefs;
 
   _message.serialPrintf("Initialising Lift Data \n");    
-  
-  _prefs.begin("liftData");
 
-  if (!_prefs.isKey("LIFTDATA1")) _prefs.putDouble("LIFTDATA1", 0.0);
-  if (!_prefs.isKey("LIFTDATA2")) _prefs.putDouble("LIFTDATA2", 0.0);
-  if (!_prefs.isKey("LIFTDATA3")) _prefs.putDouble("LIFTDATA3", 0.0);
-  if (!_prefs.isKey("LIFTDATA4")) _prefs.putDouble("LIFTDATA4", 0.0);
-  if (!_prefs.isKey("LIFTDATA5")) _prefs.putDouble("LIFTDATA5", 0.0);
-  if (!_prefs.isKey("LIFTDATA6")) _prefs.putDouble("LIFTDATA6", 0.0);
-  if (!_prefs.isKey("LIFTDATA7")) _prefs.putDouble("LIFTDATA7", 0.0);
-  if (!_prefs.isKey("LIFTDATA8")) _prefs.putDouble("LIFTDATA8", 0.0);
-  if (!_prefs.isKey("LIFTDATA9")) _prefs.putDouble("LIFTDATA9", 0.0);
-  if (!_prefs.isKey("LIFTDATA10")) _prefs.putDouble("LIFTDATA10", 0.0);
-  if (!_prefs.isKey("LIFTDATA11")) _prefs.putDouble("LIFTDATA11", 0.0);
-  if (!_prefs.isKey("LIFTDATA12")) _prefs.putDouble("LIFTDATA12", 0.0);
-
-  if (!_prefs.isKey("sLIFTTIME1")) _prefs.putString("sLIFTTIME1", "");
-  if (!_prefs.isKey("sLIFTTIME2")) _prefs.putString("sLIFTTIME2", "");
-  if (!_prefs.isKey("sLIFTTIME3")) _prefs.putString("sLIFTTIME3", "");
-  if (!_prefs.isKey("sLIFTTIME4")) _prefs.putString("sLIFTTIME4", "");
-  if (!_prefs.isKey("sLIFTTIME5")) _prefs.putString("sLIFTTIME5", "");
-  if (!_prefs.isKey("sLIFTTIME6")) _prefs.putString("sLIFTTIME6", "");
-  if (!_prefs.isKey("sLIFTTIME7")) _prefs.putString("sLIFTTIME7", "");
-  if (!_prefs.isKey("sLIFTTIME8")) _prefs.putString("sLIFTTIME8", "");
-  if (!_prefs.isKey("sLIFTTIME9")) _prefs.putString("sLIFTTIME9", "");
-  if (!_prefs.isKey("sLIFTTIME10")) _prefs.putString("sLIFTTIME10", "");
-  if (!_prefs.isKey("sLIFTTIME11")) _prefs.putString("sLIFTTIME11", "");
-  if (!_prefs.isKey("sLIFTTIME12")) _prefs.putString("sLIFTTIME12", "");
-
-  _prefs.end();
+  for (int i = 1; i <= 12; i++) {
+    String ns = "dataset" + String(i);
+    _prefs.begin(ns.c_str());
+    if (!_prefs.isKey("lift")) _prefs.putDouble("lift", 0.0);
+    if (!_prefs.isKey("temp")) _prefs.putDouble("temp", 0.0);
+    if (!_prefs.isKey("baro")) _prefs.putDouble("baro", 0.0);
+    if (!_prefs.isKey("relh")) _prefs.putDouble("relh", 0.0);
+    if (!_prefs.isKey("pref")) _prefs.putDouble("pref", 0.0);
+    if (!_prefs.isKey("pdiff")) _prefs.putDouble("pdiff", 0.0);
+    if (!_prefs.isKey("flow")) _prefs.putDouble("flow", 0.0);
+    if (!_prefs.isKey("time")) _prefs.putString("time", "");
+    _prefs.end();
+  }
 
 }
 
@@ -705,6 +689,7 @@ void DataHandler::initialiseLiftData () {
 void DataHandler::loadLiftData () {
 
   extern struct ValveLiftData valveData;
+  extern struct BenchSettings settings;
 
   DataHandler _data;
   Messages _message;
@@ -712,35 +697,47 @@ void DataHandler::loadLiftData () {
 
   _message.serialPrintf("Loading Lift Data \n");     
 
-  _prefs.begin("liftData");
+  // Backwards compatibility migration check
+  Preferences oldPrefs;
+  oldPrefs.begin("liftData");
+  if (oldPrefs.isKey("LIFTDATA1")) {
+    _message.serialPrintf("Migrating legacy flat flow data into structured datasets...\n");
+    for (int i = 1; i <= 12; i++) {
+      String oldFlowKey = "LIFTDATA" + String(i);
+      String oldTimeKey = "sLIFTTIME" + String(i);
+      double legacyFlow = oldPrefs.getDouble(oldFlowKey.c_str(), 0.0);
+      String legacyTime = oldPrefs.getString(oldTimeKey.c_str(), "");
 
-  valveData.LiftData1 = _prefs.getDouble("LIFTDATA1", 0.0);
-  valveData.LiftData2 = _prefs.getDouble("LIFTDATA2", 0.0);
-  valveData.LiftData3 = _prefs.getDouble("LIFTDATA3", 0.0);
-  valveData.LiftData4 = _prefs.getDouble("LIFTDATA4", 0.0);
-  valveData.LiftData5 = _prefs.getDouble("LIFTDATA5", 0.0);
-  valveData.LiftData6 = _prefs.getDouble("LIFTDATA6", 0.0);
-  valveData.LiftData7 = _prefs.getDouble("LIFTDATA7", 0.0);
-  valveData.LiftData8 = _prefs.getDouble("LIFTDATA8", 0.0);
-  valveData.LiftData9 = _prefs.getDouble("LIFTDATA9", 0.0);
-  valveData.LiftData10 = _prefs.getDouble("LIFTDATA10", 0.0);
-  valveData.LiftData11 = _prefs.getDouble("LIFTDATA11", 0.0);
-  valveData.LiftData12 = _prefs.getDouble("LIFTDATA12", 0.0);
+      String ns = "dataset" + String(i);
+      _prefs.begin(ns.c_str());
+      _prefs.putDouble("lift", i * settings.valveLiftInterval);
+      _prefs.putDouble("temp", 0.0);
+      _prefs.putDouble("baro", 0.0);
+      _prefs.putDouble("relh", 0.0);
+      _prefs.putDouble("pref", 0.0);
+      _prefs.putDouble("pdiff", 0.0);
+      _prefs.putDouble("flow", legacyFlow);
+      _prefs.putString("time", legacyTime);
+      _prefs.end();
+    }
+    oldPrefs.clear();
+  }
+  oldPrefs.end();
 
-  valveData.LiftTime1 = _prefs.getString("sLIFTTIME1", "");
-  valveData.LiftTime2 = _prefs.getString("sLIFTTIME2", "");
-  valveData.LiftTime3 = _prefs.getString("sLIFTTIME3", "");
-  valveData.LiftTime4 = _prefs.getString("sLIFTTIME4", "");
-  valveData.LiftTime5 = _prefs.getString("sLIFTTIME5", "");
-  valveData.LiftTime6 = _prefs.getString("sLIFTTIME6", "");
-  valveData.LiftTime7 = _prefs.getString("sLIFTTIME7", "");
-  valveData.LiftTime8 = _prefs.getString("sLIFTTIME8", "");
-  valveData.LiftTime9 = _prefs.getString("sLIFTTIME9", "");
-  valveData.LiftTime10 = _prefs.getString("sLIFTTIME10", "");
-  valveData.LiftTime11 = _prefs.getString("sLIFTTIME11", "");
-  valveData.LiftTime12 = _prefs.getString("sLIFTTIME12", "");
-
-  _prefs.end();
+  // Load Structured Datasets
+  for (int i = 1; i <= 12; i++) {
+    String ns = "dataset" + String(i);
+    _prefs.begin(ns.c_str());
+    valveData.datasets[i - 1].lift = _prefs.getDouble("lift", 0.0);
+    valveData.datasets[i - 1].temp = _prefs.getDouble("temp", 0.0);
+    valveData.datasets[i - 1].baro = _prefs.getDouble("baro", 0.0);
+    valveData.datasets[i - 1].relh = _prefs.getDouble("relh", 0.0);
+    valveData.datasets[i - 1].pref = _prefs.getDouble("pref", 0.0);
+    valveData.datasets[i - 1].pdiff = _prefs.getDouble("pdiff", 0.0);
+    valveData.datasets[i - 1].flow = _prefs.getDouble("flow", 0.0);
+    valveData.datasets[i - 1].time = _prefs.getString("time", "");
+    _prefs.end();
+  }
 
 }
 

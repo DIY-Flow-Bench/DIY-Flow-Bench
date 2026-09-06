@@ -923,22 +923,10 @@ void Webserver::saveLiftDataForm(AsyncWebServerRequest *request){
 
   _message.debugPrintf("Saving Lift Data....\n");
 
-  // TEST - Print POST vars to serial
-  // for(int i=0;i<params;i++){
-  //   const AsyncWebParameter* p = request->getParam(i);
-  //   if(p->isFile()){ //p->isPost() is also true
-  //     Serial.printf("FILE[%s]: %s, size: %u\n", p->name().c_str(), p->value().c_str(), p->size());
-  //   } else if(p->isPost()){
-  //     Serial.printf("POST[%s]: %s\n", p->name().c_str(), p->value().c_str());
-  //   } else {
-  //     Serial.printf("GET[%s]: %s\n", p->name().c_str(), p->value().c_str());
-  //   }
-  // }
-
   // Convert POST vars to JSON 
   for(int i=0;i<params;i++){
     p = request->getParam(i);
-        // get selected radio button and store it (radio button example from https://www.electrorules.com/esp32-web-server-control-stepper-motor-html-form/)
+        // get selected radio button and store it
         if (p->name() == PARAM_INPUT) {
           liftPoint = p->value();
         }
@@ -989,99 +977,30 @@ void Webserver::saveLiftDataForm(AsyncWebServerRequest *request){
   // Update lift point data
   switchval = stoi(liftPoint.c_str()); // convert std::str to int
 
-  switch (switchval) {
+  if (switchval >= 1 && switchval <= 12) {
+    int idx = switchval - 1;
+    valveData.datasets[idx].lift = switchval * settings.valveLiftInterval;
+    valveData.datasets[idx].temp = sensorVal.TempDegC;
+    valveData.datasets[idx].baro = sensorVal.BaroHPA;
+    valveData.datasets[idx].relh = sensorVal.RelH;
+    valveData.datasets[idx].pref = sensorVal.PRefH2O;
+    valveData.datasets[idx].pdiff = sensorVal.PDiffH2O;
+    valveData.datasets[idx].flow = flowValue;
+    valveData.datasets[idx].time = currentTimestamp;
 
-    case 1:
-      valveData.LiftData1 = flowValue;
-      valveData.LiftTime1 = currentTimestamp;
-      break;
-
-    case 2:
-      valveData.LiftData2 = flowValue;
-      valveData.LiftTime2 = currentTimestamp;
-      break;
-
-    case 3:
-      valveData.LiftData3 = flowValue;
-      valveData.LiftTime3 = currentTimestamp;
-      break;
-
-    case 4:
-      valveData.LiftData4 = flowValue;
-      valveData.LiftTime4 = currentTimestamp;
-      break;
-
-    case 5:
-      valveData.LiftData5 = flowValue;
-      valveData.LiftTime5 = currentTimestamp;
-      break;
-
-    case 6:
-      valveData.LiftData6 = flowValue;
-      valveData.LiftTime6 = currentTimestamp;
-      break;
-
-    case 7:
-      valveData.LiftData7 = flowValue;
-      valveData.LiftTime7 = currentTimestamp;
-      break;
-
-    case 8:
-      valveData.LiftData8 = flowValue;
-      valveData.LiftTime8 = currentTimestamp;
-      break;
-
-    case 9:
-      valveData.LiftData9 = flowValue;
-      valveData.LiftTime9 = currentTimestamp;
-      break;
-
-    case 10:
-      valveData.LiftData10 = flowValue;
-      valveData.LiftTime10 = currentTimestamp;
-      break;
-
-    case 11:
-      valveData.LiftData11 = flowValue;
-      valveData.LiftTime11 = currentTimestamp;
-      break;
-
-    case 12:
-      valveData.LiftData12 = flowValue;
-      valveData.LiftTime12 = currentTimestamp;
-      break;
+    // Persist to dataset namespace
+    String ns = "dataset" + String(switchval);
+    _prefs.begin(ns.c_str());
+    _prefs.putDouble("lift", valveData.datasets[idx].lift);
+    _prefs.putDouble("temp", valveData.datasets[idx].temp);
+    _prefs.putDouble("baro", valveData.datasets[idx].baro);
+    _prefs.putDouble("relh", valveData.datasets[idx].relh);
+    _prefs.putDouble("pref", valveData.datasets[idx].pref);
+    _prefs.putDouble("pdiff", valveData.datasets[idx].pdiff);
+    _prefs.putDouble("flow", valveData.datasets[idx].flow);
+    _prefs.putString("time", valveData.datasets[idx].time);
+    _prefs.end();
   }
-
-  
-  _prefs.begin("liftData");
-
-  _prefs.putDouble("LIFTDATA1", valveData.LiftData1);
-  _prefs.putDouble("LIFTDATA2", valveData.LiftData2);
-  _prefs.putDouble("LIFTDATA3", valveData.LiftData3);
-  _prefs.putDouble("LIFTDATA4", valveData.LiftData4);
-  _prefs.putDouble("LIFTDATA5", valveData.LiftData5);
-  _prefs.putDouble("LIFTDATA6", valveData.LiftData6);
-  _prefs.putDouble("LIFTDATA7", valveData.LiftData7);
-  _prefs.putDouble("LIFTDATA8", valveData.LiftData8);
-  _prefs.putDouble("LIFTDATA9", valveData.LiftData9);
-  _prefs.putDouble("LIFTDATA10", valveData.LiftData10);
-  _prefs.putDouble("LIFTDATA11", valveData.LiftData11);
-  _prefs.putDouble("LIFTDATA12", valveData.LiftData12);
-
-  _prefs.putString("sLIFTTIME1", valveData.LiftTime1);
-  _prefs.putString("sLIFTTIME2", valveData.LiftTime2);
-  _prefs.putString("sLIFTTIME3", valveData.LiftTime3);
-  _prefs.putString("sLIFTTIME4", valveData.LiftTime4);
-  _prefs.putString("sLIFTTIME5", valveData.LiftTime5);
-  _prefs.putString("sLIFTTIME6", valveData.LiftTime6);
-  _prefs.putString("sLIFTTIME7", valveData.LiftTime7);
-  _prefs.putString("sLIFTTIME8", valveData.LiftTime8);
-  _prefs.putString("sLIFTTIME9", valveData.LiftTime9);
-  _prefs.putString("sLIFTTIME10", valveData.LiftTime10);
-  _prefs.putString("sLIFTTIME11", valveData.LiftTime11);
-  _prefs.putString("sLIFTTIME12", valveData.LiftTime12);
-
-  _prefs.end();
     
   request->send(200);
 
@@ -1101,33 +1020,19 @@ String Webserver::getLiftDataJSON()
 
   JsonDocument liftData;
 
-  liftData["LIFTDATA1"] = valveData.LiftData1;
-  liftData["LIFTDATA2"] = valveData.LiftData2;
-  liftData["LIFTDATA3"] = valveData.LiftData3;
-  liftData["LIFTDATA4"] = valveData.LiftData4;
-  liftData["LIFTDATA5"] = valveData.LiftData5;
-  liftData["LIFTDATA6"] = valveData.LiftData6;
-  liftData["LIFTDATA7"] = valveData.LiftData7;
-  liftData["LIFTDATA8"] = valveData.LiftData8;
-  liftData["LIFTDATA9"] = valveData.LiftData9;
-  liftData["LIFTDATA10"] = valveData.LiftData10;
-  liftData["LIFTDATA11"] = valveData.LiftData11;
-  liftData["LIFTDATA12"] = valveData.LiftData12;
+  for (int i = 1; i <= 12; i++) {
+    String key = "DATASET" + String(i);
+    JsonObject subObj = liftData[key].to<JsonObject>();
+    subObj["LIFT"] = valveData.datasets[i - 1].lift;
+    subObj["TEMP"] = valveData.datasets[i - 1].temp;
+    subObj["BARO"] = valveData.datasets[i - 1].baro;
+    subObj["RELH"] = valveData.datasets[i - 1].relh;
+    subObj["PREF"] = valveData.datasets[i - 1].pref;
+    subObj["PDIFF"] = valveData.datasets[i - 1].pdiff;
+    subObj["FLOW"] = valveData.datasets[i - 1].flow;
+    subObj["TIME"] = valveData.datasets[i - 1].time;
+  }
 
-  liftData["LIFTTIME1"] = valveData.LiftTime1;
-  liftData["LIFTTIME2"] = valveData.LiftTime2;
-  liftData["LIFTTIME3"] = valveData.LiftTime3;
-  liftData["LIFTTIME4"] = valveData.LiftTime4;
-  liftData["LIFTTIME5"] = valveData.LiftTime5;
-  liftData["LIFTTIME6"] = valveData.LiftTime6;
-  liftData["LIFTTIME7"] = valveData.LiftTime7;
-  liftData["LIFTTIME8"] = valveData.LiftTime8;
-  liftData["LIFTTIME9"] = valveData.LiftTime9;
-  liftData["LIFTTIME10"] = valveData.LiftTime10;
-  liftData["LIFTTIME11"] = valveData.LiftTime11;
-  liftData["LIFTTIME12"] = valveData.LiftTime12;
-
-  // serializeJson(liftData, jsonString);
   serializeJsonPretty(liftData, jsonString);
 
   return jsonString;
@@ -1152,63 +1057,28 @@ void Webserver::clearLiftData (AsyncWebServerRequest *request) {
   Preferences _prefs;
   extern struct ValveLiftData valveData;
 
-  // _message.serialPrintf("Clearing Lift Data \n");    
-  
-  _prefs.begin("liftData");
+  for (int i = 1; i <= 12; i++) {
+    String ns = "dataset" + String(i);
+    _prefs.begin(ns.c_str());
+    _prefs.putDouble("lift", 0.0);
+    _prefs.putDouble("temp", 0.0);
+    _prefs.putDouble("baro", 0.0);
+    _prefs.putDouble("relh", 0.0);
+    _prefs.putDouble("pref", 0.0);
+    _prefs.putDouble("pdiff", 0.0);
+    _prefs.putDouble("flow", 0.0);
+    _prefs.putString("time", "");
+    _prefs.end();
 
-  _prefs.putDouble("LIFTDATA1", 0.0);
-  _prefs.putDouble("LIFTDATA2", 0.0);
-  _prefs.putDouble("LIFTDATA3", 0.0);
-  _prefs.putDouble("LIFTDATA4", 0.0);
-  _prefs.putDouble("LIFTDATA5", 0.0);
-  _prefs.putDouble("LIFTDATA6", 0.0);
-  _prefs.putDouble("LIFTDATA7", 0.0);
-  _prefs.putDouble("LIFTDATA8", 0.0);
-  _prefs.putDouble("LIFTDATA9", 0.0);
-  _prefs.putDouble("LIFTDATA10", 0.0);
-  _prefs.putDouble("LIFTDATA11", 0.0);
-  _prefs.putDouble("LIFTDATA12", 0.0);
-
-  _prefs.putString("sLIFTTIME1", "");
-  _prefs.putString("sLIFTTIME2", "");
-  _prefs.putString("sLIFTTIME3", "");
-  _prefs.putString("sLIFTTIME4", "");
-  _prefs.putString("sLIFTTIME5", "");
-  _prefs.putString("sLIFTTIME6", "");
-  _prefs.putString("sLIFTTIME7", "");
-  _prefs.putString("sLIFTTIME8", "");
-  _prefs.putString("sLIFTTIME9", "");
-  _prefs.putString("sLIFTTIME10", "");
-  _prefs.putString("sLIFTTIME11", "");
-  _prefs.putString("sLIFTTIME12", "");
-
-  valveData.LiftData1 = 0.0;
-  valveData.LiftData2 = 0.0;
-  valveData.LiftData3 = 0.0;
-  valveData.LiftData4 = 0.0;
-  valveData.LiftData5 = 0.0;
-  valveData.LiftData6 = 0.0;
-  valveData.LiftData7 = 0.0;
-  valveData.LiftData8 = 0.0;
-  valveData.LiftData9 = 0.0;
-  valveData.LiftData10 = 0.0;
-  valveData.LiftData11 = 0.0;
-  valveData.LiftData12 = 0.0;
-
-  valveData.LiftTime1 = "";
-  valveData.LiftTime2 = "";
-  valveData.LiftTime3 = "";
-  valveData.LiftTime4 = "";
-  valveData.LiftTime5 = "";
-  valveData.LiftTime6 = "";
-  valveData.LiftTime7 = "";
-  valveData.LiftTime8 = "";
-  valveData.LiftTime9 = "";
-  valveData.LiftTime10 = "";
-  valveData.LiftTime11 = "";
-  valveData.LiftTime12 = "";
-
-  _prefs.end();
+    valveData.datasets[i - 1].lift = 0.0;
+    valveData.datasets[i - 1].temp = 0.0;
+    valveData.datasets[i - 1].baro = 0.0;
+    valveData.datasets[i - 1].relh = 0.0;
+    valveData.datasets[i - 1].pref = 0.0;
+    valveData.datasets[i - 1].pdiff = 0.0;
+    valveData.datasets[i - 1].flow = 0.0;
+    valveData.datasets[i - 1].time = "";
+  }
 
   request->send(200);
 
@@ -2216,18 +2086,18 @@ String Webserver::processDatagraphPageTemplate(const String &var) {
 
   // scale the datapoint values to fit the flow axis scale
   // NOTE: surface is 500 units high with zero at the bottom
-  if (var == "LINE_DATA1") return String(500 - (valveData.LiftData1 * scaleFactor));
-  if (var == "LINE_DATA2") return String(500 - (valveData.LiftData2 * scaleFactor));
-  if (var == "LINE_DATA3") return String(500 - (valveData.LiftData3 * scaleFactor));
-  if (var == "LINE_DATA4") return String(500 - (valveData.LiftData4 * scaleFactor));
-  if (var == "LINE_DATA5") return String(500 - (valveData.LiftData5 * scaleFactor));
-  if (var == "LINE_DATA6") return String(500 - (valveData.LiftData6 * scaleFactor));
-  if (var == "LINE_DATA7") return String(500 - (valveData.LiftData7 * scaleFactor));
-  if (var == "LINE_DATA8") return String(500 - (valveData.LiftData8 * scaleFactor));
-  if (var == "LINE_DATA9") return String(500 - (valveData.LiftData9 * scaleFactor));
-  if (var == "LINE_DATA10") return String(500 - (valveData.LiftData10 * scaleFactor));
-  if (var == "LINE_DATA11") return String(500 - (valveData.LiftData11 * scaleFactor));
-  if (var == "LINE_DATA12") return String(500 - (valveData.LiftData12 * scaleFactor));
+  if (var == "LINE_DATA1") return String(500 - (valveData.datasets[0].flow * scaleFactor));
+  if (var == "LINE_DATA2") return String(500 - (valveData.datasets[1].flow * scaleFactor));
+  if (var == "LINE_DATA3") return String(500 - (valveData.datasets[2].flow * scaleFactor));
+  if (var == "LINE_DATA4") return String(500 - (valveData.datasets[3].flow * scaleFactor));
+  if (var == "LINE_DATA5") return String(500 - (valveData.datasets[4].flow * scaleFactor));
+  if (var == "LINE_DATA6") return String(500 - (valveData.datasets[5].flow * scaleFactor));
+  if (var == "LINE_DATA7") return String(500 - (valveData.datasets[6].flow * scaleFactor));
+  if (var == "LINE_DATA8") return String(500 - (valveData.datasets[7].flow * scaleFactor));
+  if (var == "LINE_DATA9") return String(500 - (valveData.datasets[8].flow * scaleFactor));
+  if (var == "LINE_DATA10") return String(500 - (valveData.datasets[9].flow * scaleFactor));
+  if (var == "LINE_DATA11") return String(500 - (valveData.datasets[10].flow * scaleFactor));
+  if (var == "LINE_DATA12") return String(500 - (valveData.datasets[11].flow * scaleFactor));
 
 
 

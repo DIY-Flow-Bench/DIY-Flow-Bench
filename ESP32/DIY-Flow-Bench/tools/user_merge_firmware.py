@@ -1,5 +1,5 @@
 # user_emerge_firmware.py
-# This file is part of the DIY FLow Bench Project. https//github.com/DIY-Flow-Bench/DIY-Flow-Bench
+# This file is part of the DIY FLow Bench Project. https//github.com/DeeEmm/DIY-Flow-Bench
 # Author: DeeEmm
 Import("env")
 import os
@@ -100,16 +100,18 @@ def merge_bin(source, target, env):
     build = extract_json_val("BUILD_NUMBER")
     release = extract_json_val("RELEASE")
 
-    # old_merged_file = os.path.join(release_path, f"{release}_{build}_install.bin")
-    # old_update_file = os.path.join(release_path, f"{release}_{build}_update.bin")
+    # get current git branch name
+    import subprocess
+    try:
+        current_branch = subprocess.check_output(
+            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+            stderr=subprocess.DEVNULL
+        ).strip().decode("utf-8")
+    except Exception:
+        current_branch = "UNKNOWN"
 
-    # del_wildcard(old_merged_file)
-    # del_wildcard(old_update_file)
-
-    # print(old_merged_file)
-
-    merged_file = os.path.join(release_path, f"{release}_{build}_install.bin")
-    update_file = os.path.join(release_path, f"{release}_{build}_update.bin")
+    merged_file = os.path.join(release_path, f"{release}_{current_branch}_{build}_install.bin")
+    update_file = os.path.join(release_path, f"{release}_{current_branch}_{build}_update.bin")
 
     releases_directory =  os.path.join(project_path, f"release/")
     data_directory =  os.path.join(project_path, f"data/")
@@ -156,8 +158,18 @@ env.AddPostAction(APP_BIN , merge_bin)
 build = extract_json_val("BUILD_NUMBER")
 release = extract_json_val("RELEASE")
 
-old_merged_file = os.path.join(release_path, f"{release}_{build}_install.bin")
-old_update_file = os.path.join(release_path, f"{release}_{build}_update.bin")
+# get current git branch name
+import subprocess
+try:
+    current_branch = subprocess.check_output(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        stderr=subprocess.DEVNULL
+    ).strip().decode("utf-8")
+except Exception:
+    current_branch = "UNKNOWN"
+
+old_merged_file = os.path.join(release_path, f"{release}_{current_branch}_{build}_install.bin")
+old_update_file = os.path.join(release_path, f"{release}_{current_branch}_{build}_update.bin")
 
 del_wildcard(old_merged_file)
 del_wildcard(old_update_file)

@@ -349,31 +349,19 @@ struct SensorData {
 /***********************************************************
  * Valve Lift data
  ***/
+struct DataPoint {
+  double_t lift = 0.0;
+  double_t temp = 0.0;
+  double_t baro = 0.0;
+  double_t relh = 0.0;
+  double_t pref = 0.0;
+  double_t pdiff = 0.0;
+  double_t flow = 0.0;
+  String time = "";
+};
+
 struct ValveLiftData {
-  double_t LiftData1 = 0.0;
-  double_t LiftData2 = 0.0;
-  double_t LiftData3 = 0.0;
-  double_t LiftData4 = 0.0;
-  double_t LiftData5 = 0.0;
-  double_t LiftData6 = 0.0;
-  double_t LiftData7 = 0.0;
-  double_t LiftData8 = 0.0;
-  double_t LiftData9 = 0.0;
-  double_t LiftData10 = 0.0;
-  double_t LiftData11 = 0.0;
-  double_t LiftData12 = 0.0;
-  String LiftTime1 = "";
-  String LiftTime2 = "";
-  String LiftTime3 = "";
-  String LiftTime4 = "";
-  String LiftTime5 = "";
-  String LiftTime6 = "";
-  String LiftTime7 = "";
-  String LiftTime8 = "";
-  String LiftTime9 = "";
-  String LiftTime10 = "";
-  String LiftTime11 = "";
-  String LiftTime12 = "";
+  DataPoint datasets[12];
 };
 
 

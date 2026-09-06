@@ -34,6 +34,16 @@ with open(file_path) as file_data:
 
 # increment build and update version.json
 
+# get current git branch name
+import subprocess
+try:
+    current_branch = subprocess.check_output(
+        ["git", "rev-parse", "--abbrev-ref", "HEAD"],
+        stderr=subprocess.DEVNULL
+    ).strip().decode("utf-8")
+except Exception:
+    current_branch = "UNKNOWN"
+
 # get current date
 dtnow = datetime.datetime.now()
 year = dtnow.strftime("%y")
@@ -46,8 +56,8 @@ release = json_data['RELEASE']
 # print(build_num  + "\n")
 
 # get current details and delete files
-old_merged_file = os.path.join(release_path, f"{release}_{build_num}_install.bin")
-old_update_file = os.path.join(release_path, f"{release}_{build_num}_update.bin")
+old_merged_file = os.path.join(release_path, f"{release}_{current_branch}_{build_num}_install.bin")
+old_update_file = os.path.join(release_path, f"{release}_{current_branch}_{build_num}_update.bin")
 try:
     os.remove(old_merged_file)
     os.remove(old_update_file)

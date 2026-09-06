@@ -26,7 +26,9 @@ https://github.com/DIY-Flow-Bench/DIY-Flow-Bench/blob/master/.github/CONTRIBUTIN
 Build Number    | Description of Change
 --              | --
 
-2609060004		| Timestamp support added 
+2609060008		| Restructured JSON file to include additional metrics
+2609060003		| Updated binary file names to include branch
+2609060002		| Timestamp support added 
 				| DS1307 I2C RTC BOB support added
 				| NTP synchronisation added
 				| GUI datetime display
